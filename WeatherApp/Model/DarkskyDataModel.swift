@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class DarkskyDataModel {
-    var temperature: Int = 0
+    var temperatureReport: String = ""
     var forecastCondition: String = ""
     var city: String = "Los Angeles"
     
