@@ -62,13 +62,14 @@ UITableViewDelegate {
     }
     
     func updateWeatherData(json: JSON) {
-        if let currentForecast = json["currently"]["temperature"].double {
+        if !json["daily"]["data"][0].isEmpty {
             let date = Date()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "EEEE"
             let dayOfTheWeek = dateFormatter.string(from: date)
             let high = json["daily"]["data"][0]["temperatureHigh"].double!
             let low = json["daily"]["data"][0]["temperatureLow"].double!
+            
             weatherModel.temperatureReport = "\(dayOfTheWeek) H:\(Int(high)) L:\(Int(low))"
             weatherModel.forecastCondition = json["currently"]["icon"].stringValue
             updateUI()
@@ -80,8 +81,7 @@ UITableViewDelegate {
     
     func updateUI() {
         tempLabel.text = "\(weatherModel.temperatureReport)"
-//        weatherIcon.image = UIImage(named: weatherModel.forecastCondition)
-        weatherIcon.image = UIImage(named: "sunny")
+        weatherIcon.image = UIImage(named: weatherModel.forecastCondition)
     }
     
     
