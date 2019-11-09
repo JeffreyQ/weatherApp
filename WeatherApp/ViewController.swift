@@ -7,14 +7,33 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, CLLocationManagerDelegate  {
+    let locationManager = CLLocationManager()
+    @IBOutlet weak var weatherIcon: UIImageView!
+    @IBOutlet weak var weatherDetails: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
 
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
+            // fetchWeather()
+            guard let locVal: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+            print("locations = \(locVal.latitude) \(locVal.longitude)")
+            
+        }
+    }
 
+    @IBAction func refreshWeather(_ sender: Any) {
+        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.startUpdatingLocation()
+    }
 }
 
