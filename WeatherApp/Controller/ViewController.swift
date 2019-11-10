@@ -31,6 +31,7 @@ UITableViewDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
+        
     }
 
     // Get Weather Data
