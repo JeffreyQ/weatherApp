@@ -11,8 +11,7 @@ import CoreLocation
 import Alamofire
 import SwiftyJSON
 
-class ViewController: UIViewController, CLLocationManagerDelegate,
-UITableViewDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
     // constants
     let SECRET_KEY = "f672ddd4106d7f83041825d250d48427"
@@ -37,7 +36,6 @@ UITableViewDelegate {
     func getWeatherData(url: String, params: [String: String]) {
         if let latitude = params["latitude"], let longitude = params["longitude"] {
             let endpoint = DARKSKY_URL + SECRET_KEY + "/" + latitude + "," + longitude
-//        let endpoint = DARKSKY_URL + SECRET_KEY + "/34.0689,-118.4452"
         
             AF.request(endpoint)
                 .responseJSON { response in
@@ -49,7 +47,6 @@ UITableViewDelegate {
                     }
                     
                     if let json = response.value {
-//                        print("JSON: \(json)")
                         self.updateWeatherData(json: JSON(json))
                     } else {
                         print("Network Error")
@@ -81,7 +78,6 @@ UITableViewDelegate {
     
     
     func updateUI() {
-        print(weatherModel.forecastSummary)
         tempLabel.text = "\(weatherModel.temperatureReport)"
         weatherIcon.image = UIImage(named: weatherModel.forecastCondition)
     }
@@ -93,13 +89,10 @@ UITableViewDelegate {
         if location.horizontalAccuracy > 0 {
             locationManager.stopUpdatingLocation()
             
-            print("longitude = \(location.coordinate.longitude), latitude = \(location.coordinate.latitude)")
-            
             let latitude = String(location.coordinate.latitude)
             let longitude = String(location.coordinate.longitude)
             
             let params : [String : String] = ["latitude" : latitude, "longitude" : longitude, "appid" : SECRET_KEY]
-            print("params \(params)")
             getWeatherData(url: DARKSKY_URL, params: params)
         }
     }
@@ -122,24 +115,5 @@ UITableViewDelegate {
             }
         }
     }
-    
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 2
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier") as! CustomTableViewCell
-//
-//
-//        if CLLocationCoordinate2DIsValid(locVal) {
-//            cell.weatherData.text = "locations = \(locVal.latitude) \(locVal.longitude)"
-//        }
-//        return cell
-//    }
-//
 }
 
