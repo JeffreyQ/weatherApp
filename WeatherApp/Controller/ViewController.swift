@@ -23,7 +23,6 @@ UITableViewDelegate {
     
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
-    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +72,7 @@ UITableViewDelegate {
             
             weatherModel.temperatureReport = "\(dayOfTheWeek) H:\(Int(high)) L:\(Int(low))"
             weatherModel.forecastCondition = json["currently"]["icon"].stringValue
+            weatherModel.forecastSummary = json["daily"]["data"][0]["summary"].stringValue
             updateUI()
         } else {
             print("Weather data is unavailable at the moment")
@@ -81,6 +81,7 @@ UITableViewDelegate {
     
     
     func updateUI() {
+        print(weatherModel.forecastSummary)
         tempLabel.text = "\(weatherModel.temperatureReport)"
         weatherIcon.image = UIImage(named: weatherModel.forecastCondition)
     }
@@ -111,6 +112,14 @@ UITableViewDelegate {
         
         if CLLocationManager.locationServicesEnabled() {
             locationManager.requestLocation()
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowWeatherDetailSegue" {
+            if let destinationVC = segue.destination as? WeatherDetailViewController {
+                destinationVC.weatherModel = weatherModel
+            }
         }
     }
     
